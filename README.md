@@ -1,95 +1,126 @@
 # WalletConnect
 golang wallet connect 
 
-## 1. DAPP work flow
-
-### 1.1 genrate wc URI and show QRCode for wallet
-
 wc:{topic...}@{version...}?bridge={url...}&key={key...}
 
 **topic** is a uuid string
 
+
+- payload decrypt
+
+  mode: AES-256-CBC
+
+  key:  d8089b579aeef1ba4692d72bd3a0bb870f8bbceafaab325f23739635e2e54f05 (hex)
+
+  iv:   1f432ae9451cc4e27f290ba891426350 (hex)
+
+
+workflow example
+- wc URI (QRCode)
+
 ```text
-wc:9d9c764d-e6ca-4163-9320-779402e880d3@1?bridge=https%3A%2F%2Fy.bridge.walletconnect.org&key=5384d68cb83a80b8f1cce8ff37415a54d52a079b77940cb70b6dab2f12fc68f6
+wc:38d80e38-1c9a-470f-aed1-27b8ced3338d@1?bridge=https%3A%2F%2F6.bridge.walletconnect.org&key=d8089b579aeef1ba4692d72bd3a0bb870f8bbceafaab325f23739635e2e54f05
 ```
 
-### 1.2 connect to bridge
-
-DAPP -> bridge
-
-connect to bridge by websocket
-
-```http request
-wss://0.bridge.walletconnect.org/?env=browser&host=app.uniswap.org&protocol=wc&version=1
-
-Accept-Encoding: gzip, deflate, br
-Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,zh-TW;q=0.5
-Cache-Control: no-cache
-Connection: Upgrade
-Host: c.bridge.walletconnect.org
-Origin: https://app.uniswap.org
-Pragma: no-cache
-Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits
-Sec-WebSocket-Key: 2HVyAUunvvZDCgqnPLZFJw==
-Sec-WebSocket-Version: 13
-Upgrade: websocket
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36 Edg/104.0.1293.47
-```
-
-### 1.3 pub/sub message 
-
-- send topic and encrypted payload (AES-256-CBC + HMAC + IV)
+- DAPP -> bridge (dapp connect)
 
 ```json
+{"topic":"38d80e38-1c9a-470f-aed1-27b8ced3338d","type":"pub","payload":"{\"data\":\"92807450bee1ecc14432ade00da18f73e97f37859318264f4c2bdc5ee3450559215965e6e8ae5919c04710a138983d54f037df6fb077b6638279c2b84a6f5708572ea6c38e6ddb3669ac06656dfdb75303f11717c9dd4348aa75455338b72cc4abfca9d92bd6ab47dcaa88001e9c3caa7a800d48742a873c33e4533ac934ca630e30281f8fc6e70edcc7e0dcf4b2e55e1d47ffa781dd2544963e9a81441ca17e456714e18f83cfcf2bd13a37a26877df7ec73ffba1451c614e28aff263b88398f192a6e3fc44520dad78f4b175ef488a774b280d2f249aae73a55edfbfbcf611fc431d78a00f73fd8867c06f5381516b84315c913e2df549a70907348c2db4e6b5d3db5fe172734ad83f82858552067ec426bb6afc0990fb9002dcc2d48d1b559960b49e5284b8041e579c0ce3fcf66588002d70f4fb9a22986300e820b2266ac597741436bbefb2a47bdae46c29e67916a98f1171832a4dbefd14cd3059d9465988dee81c362b775182e9bae51a2edc6c5da299e41fad3d49c6d42e3255b45c17719e055b582285b4dadf9c750ddd09e49b337c61619d1f0d4b7caee9671934042be32cd5831b48c2ec8fa4835450b3b50a20aad6c062ce1ec2b682431e78db\",\"hmac\":\"b39735dcc4a57d92f749b4376837fbc3c0cabae38834605d69c6a173f9ccc3fa\",\"iv\":\"1f432ae9451cc4e27f290ba891426350\"}","silent":true}
+```
+payload
+```json
 {
-  "topic":"9d9c764d-e6ca-4163-9320-779402e880d3",
-  "type":"pub",
-  "payload":"{\"data\":\"42eb083fa4e59bc0e184aa3d938af7a01bbc943345f96bc4d17d39b267312a9362e27baa43a488d6ed08d7e29a6fe4bf63e4a1c19e06bfedee142f3e9bf6d1308871efeea93a8044814fb02c3581b80933b290ab730d2da978aee35d36ee2f9153736413b875ec9f8255245f33dbf8aed11e3c710d3b3de5c0445078c60377745fb56208838e43cb8564108c21380bb6d9a6beb1a97172a562dd07d2d0eeaeae2320115932518c63be41578d15c76e0ce2d53ad43974a00512a6e8c9e280e51a38da98534c034a31e789a2acc2bd6656a4972da81d8dcea83254160e39a46f39753fa450fc6cd68d0086116c8cb22a360cbe3598528b686865c59e33bd918301bcb6040959bac57fc612f6428d9e36a95cbc11223b055da7aa94571537f424ae44035bbd70cd6f8310f134b73e258ccc20716432589bd90e03a3818d8a5d9159ed7647c574180689c80b4639ab598ebab5fb2f2798f391f5080fa1493595ff936264b028c6c06a3c37c7e5f3135974b36a2d3fe85acdf497976a1856ece47f2578a3d0772faf6fcd3d47a20803f1d100d41697ba62927bfc58efa67e369530acde5a75fd53765d30e406fc4ca5557fcd2833835c8a2e0c49d2a9124b2f1bf13b\",\"hmac\":\"c8bf96199abe0059fd1a8869448516d871e56201e6759f71c03f39be2e2bbd2a\",\"iv\":\"0b0026d95c2b6704b9e02c9bd34dcfa0\"}",
-  "silent":true
+    "id":1660732761714425,
+    "jsonrpc":"2.0",
+    "method":"wc_sessionRequest",
+    "params":[
+        {
+            "peerId":"90e583f2-9078-4f0a-8ace-fb6265d47f50",
+            "peerMeta":{
+                "description":"Swap or provide liquidity on the Uniswap Protocol",
+                "url":"https://app.uniswap.org",
+                "icons":[
+                    "https://app.uniswap.org/./favicon.png",
+                    "https://app.uniswap.org/./images/192x192_App_Icon.png",
+                    "https://app.uniswap.org/./images/512x512_App_Icon.png"
+                ],
+                "name":"Uniswap Interface"
+            },
+            "chainId":1
+        }
+    ]
 }
 ```
 
-- payload decrypt
-  
-  mode: AES-256-CBC 
-
-  key:  5384d68cb83a80b8f1cce8ff37415a54d52a079b77940cb70b6dab2f12fc68f6 (hex)
-
-  iv:   0b0026d95c2b6704b9e02c9bd34dcfa0 (hex)
+- DAPP -> bridge (subscribe events)
 
 ```json
+{"topic":"90e583f2-9078-4f0a-8ace-fb6265d47f50","type":"sub","payload":"","silent":true}
+```
+
+- DAPP <- bridge (wallet approve)
+
+```json
+{"topic":"90e583f2-9078-4f0a-8ace-fb6265d47f50","type":"pub","payload":"{\"data\":\"c5a52ca478357941e6d0cb41b35cbd83f2aa86f62b9a328450dc5867998271187f3efd1a39cafacc318ebf886156f64748edd23dbef3c393abeffeafa33dcb89b51c863720c7baee902c22edccf3ce750d4c28ddc3bee589556eaa9410c964d0ca854270eba724db59106eddf80680308b25a0d4f7322d7cde6729e6b26707235f2393826f1d391ae8639ea67f1777571692010cce80517c620331bcbabf9c294ab805bb7bf7c353903c9be665f54d69f5cac666ff6773b3ab4ff6ed1e63ba9bfc3115878ccb72a9d75abaddbfe5d037ce90f8b19fc04ef422e3dda9fd4672d3089091dd95cd0ca0cde8dd1b625fa790fcb57dd6573b3e0de9d73c556f38d5702d7e28112e7dc573608be5ea33d3b120d976f6b88947d23be00ad7e76247872d7bf3b10ee0cc7bdb8cfb7fe32c7b2e1e7ad99b34438fa4f9e72ff1fc2e67923dd09ff52e7acb417357423b6f5558830780354f4d994698575763e288c21bab809527fea0c7162069270c55d83ecdfc6e\",\"hmac\":\"c6bcf7ccbe4c59bc0c951c08db3b2444a2bb59707e6de64ed37b320e8ab15956\",\"iv\":\"88a091f992a62d14ee5a083b793d7721\"}","silent":true}
+```
+payload
+```json
 {
-  "id":1660726015060055,
+  "id":1660732761714425,
   "jsonrpc":"2.0",
-  "method":"wc_sessionRequest",
+  "result":{
+    "approved":true,
+    "chainId":1,
+    "networkId":0,
+    "accounts":[
+      "0x81A81D8Eef3d7E6023F3e7339A626C2EBE1A39d9"
+    ],
+    "rpcUrl":"",
+    "peerId":"31038ba4-7d48-4792-9e5b-9cd45ca5fb9a",
+    "peerMeta":{
+      "description":"imToken wallet APP",
+      "url":"https://token.im",
+      "icons":[
+        "https://token.im/images/download/appLogo.svg"
+      ],
+      "name":"imToken"
+    }
+  }
+}
+```
+
+- DAPP -> bridge (dapp ack)
+ 
+```json
+{"topic":"90e583f2-9078-4f0a-8ace-fb6265d47f50","type":"ack","payload":"","silent":true}
+```
+
+- DAPP <- bridge (wallet disconnect)
+
+```json
+{"topic":"90e583f2-9078-4f0a-8ace-fb6265d47f50","type":"pub","payload":"{\"data\":\"cdc4a90b7783915eeadca95d837e352d8c7781cc6a26120130154d30640108a79e238bf5d03b16c214f725c5d37344ebec31eec3672688c461259f84aa76ca84cd64e108884feac1c33de7cf74c9a826cd5d199a1d8e2a0c361f467a2668d84f2990c3da94cd629bce609b6ef219c7a2392525c5ebeee2978ff5edd96f4344206ac7cec7ef7ed30ec49feca08a907ebd4335135e93ed1568a103287a471b6775\",\"hmac\":\"7d66dd9da8cda7cdf59adf9fef3fdc582e9a95a1b149d60ff8a10df2eea0bc4d\",\"iv\":\"624614af353b33f90c4d60aed31aa03e\"}","silent":true}
+```
+
+payload
+```json
+{
+  "id":1660732892855299,
+  "jsonrpc":"2.0",
+  "method":"wc_sessionUpdate",
   "params":[
     {
-      "peerId":"1d1208ac-03de-4a1e-825e-84433d3a90f2",
-      "peerMeta":{
-        "description":"Swap or provide liquidity on the Uniswap Protocol",
-        "url":"https://app.uniswap.org",
-        "icons":[
-          "https://app.uniswap.org/./favicon.png",
-          "https://app.uniswap.org/./images/192x192_App_Icon.png",
-          "https://app.uniswap.org/./images/512x512_App_Icon.png"
-        ],
-        "name":"Uniswap Interface"
-      },
-      "chainId":1
+      "approved":false,
+      "chainId":null,
+      "networkId":null,
+      "accounts":null
     }
   ]
 }
 ```
 
-- subscribe events
-
-DAPP -> bridge
+- DAPP -> bridge (dapp ack)
 
 ```json
-{
-  "topic":"28f17b68-4878-4473-8bc3-15f6af81a773",
-  "type":"sub",
-  "payload":"",
-  "silent":true
-}
+{"topic":"90e583f2-9078-4f0a-8ace-fb6265d47f50","type":"ack","payload":"","silent":true}
 ```
+
