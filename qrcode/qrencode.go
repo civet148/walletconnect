@@ -13,6 +13,6 @@ func QrencodeTerminal(strText string, level qrencode.ECLevel) {
 	if err != nil {
 		panic(err)
 	}
-	grid.Image(8)
+	grid.Image(0)
 	grid.TerminalOutput(os.Stdout)
 }

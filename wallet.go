@@ -1,4 +1,4 @@
-package rpc
+package wc
 
 import (
 	"github.com/civet148/log"
@@ -6,17 +6,17 @@ import (
 	"github.com/ybbus/jsonrpc"
 )
 
-type WCClient struct {
+type WCWallet struct {
 	jsonrpc.RPCClient
 	params *proto.ParamsInit
 }
 
-func NewWCClient() *WCClient {
-	return &WCClient{}
+func NewWCWallet() *WCWallet {
+	return &WCWallet{}
 }
 
 // initializes the client with persisted storage and a network connection
-func (c *WCClient) Init(params *proto.ParamsInit) bool {
+func (c *WCWallet) Init(params *proto.ParamsInit) bool {
 	c.RPCClient = jsonrpc.NewClient(params.RelayProvider)
 	if c.RPCClient == nil {
 		log.Errorf("initiate connect failed")
@@ -27,56 +27,56 @@ func (c *WCClient) Init(params *proto.ParamsInit) bool {
 }
 
 // for proposer to propose a session to a responder
-func (c *WCClient) Connect(params *proto.ParamsConnect) {
+func (c *WCWallet) Connect(params *proto.ParamsConnect) {
 
 }
 
 // for responder to receive a session proposal from a proposer
-func (c *WCClient) Pair(params *proto.ParamsPair) {
+func (c *WCWallet) Pair(params *proto.ParamsPair) {
 
 }
 
 // for responder to approve a session proposal
-func (c *WCClient) Approve(params *proto.ParamsApprove) {
+func (c *WCWallet) Approve(params *proto.ParamsApprove) {
 
 }
 
 // for responder to reject a session proposal
-func (c *WCClient) Reject(params *proto.ParamsReject) {
+func (c *WCWallet) Reject(params *proto.ParamsReject) {
 
 }
 
 // for responder to upgrade session permissions
-func (c *WCClient) Upgrade(params *proto.ParamsUpgrade) {
+func (c *WCWallet) Upgrade(params *proto.ParamsUpgrade) {
 
 }
 
 // for responder to update session state
-func (c *WCClient) Update(params *proto.ParamsUpdate) {
+func (c *WCWallet) Update(params *proto.ParamsUpdate) {
 
 }
 
 // for proposer to request JSON-RPC
-func (c *WCClient) Request(params *proto.ParamsRequest) {
+func (c *WCWallet) Request(params *proto.ParamsRequest) {
 
 }
 
 // for responder to respond JSON-RPC
-func (c *WCClient) Respond(params *proto.ParamsRespond) {
+func (c *WCWallet) Respond(params *proto.ParamsRespond) {
 
 }
 
 // for either to ping and verify peer is online
-func (c *WCClient) Ping(params *proto.ParamsPing) {
+func (c *WCWallet) Ping(params *proto.ParamsPing) {
 
 }
 
 // for either to send notifications
-func (c *WCClient) Notify(params *proto.ParamsNotify) {
+func (c *WCWallet) Notify(params *proto.ParamsNotify) {
 
 }
 
 // for either to disconnect a session
-func (c *WCClient) Disconnect(params *proto.ParamsDisconnect) {
+func (c *WCWallet) Disconnect(params *proto.ParamsDisconnect) {
 
 }
