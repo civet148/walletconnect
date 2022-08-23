@@ -1,4 +1,4 @@
-package wc
+package walletconnect
 
 import (
 	"github.com/civet148/log"
