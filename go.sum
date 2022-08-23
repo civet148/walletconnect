@@ -3,8 +3,8 @@ github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/civet148/httpc v1.0.0 h1:xgfkY1RWL+nC8B8Do/Xk3ZS1loKQRQujfjE0IxM2Gfw=
 github.com/civet148/httpc v1.0.0/go.mod h1:x16y9I82c54fWJxf2+SxVZyAu7e/cDDaOaM9sXlUFKI=
-github.com/civet148/jsonrpc v0.2.0 h1:bv8fI5NkXmrF2NCN9jfNuU/PTF0ZOyOYP6RW+3IcFh4=
-github.com/civet148/jsonrpc v0.2.0/go.mod h1:jbyRUfVWIsdUy3aghV1ANuxy9vlrmshTIX8IkNr0EMA=
+github.com/civet148/jsonrpc v0.2.1 h1:4Qo/o+DIxZXuet3eW9m7b4YokjteJUmXOumYNVOSPM4=
+github.com/civet148/jsonrpc v0.2.1/go.mod h1:jbyRUfVWIsdUy3aghV1ANuxy9vlrmshTIX8IkNr0EMA=
 github.com/civet148/log v1.1.0/go.mod h1:fR/TOocpVvjAKFXzx/tf+LUpntHmfVekz126r5wmgME=
 github.com/civet148/log v1.1.3 h1:ClKaD8pgImkli+Ove21GjeydI77i9gurrAkSl4rRZrk=
 github.com/civet148/log v1.1.3/go.mod h1:goUIYRED4uhCzlF5mcwHrkJ+nPXJIPwcaB6IJSuiEW0=
