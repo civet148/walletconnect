@@ -1,6 +1,7 @@
 package walletconnect
 
 import (
+	"encoding/hex"
 	"github.com/civet148/log"
 	"net/url"
 	"strings"
@@ -39,4 +40,9 @@ func ParseWC(wc string) (*WalletConnectURI, error) {
 		Topic:   u.User.Username(),
 		Key:     key,
 	}, nil
+}
+
+func (m *WalletConnectURI) GetBytesKey() []byte {
+	key, _ := hex.DecodeString(m.Key)
+	return key
 }

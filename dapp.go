@@ -2,20 +2,17 @@ package walletconnect
 
 import (
 	"context"
-	"encoding/hex"
 	"encoding/json"
 	"github.com/civet148/jsonrpc"
 	"github.com/civet148/log"
-	"github.com/civet148/gotools/cryptos/goaes"
-	_ "github.com/civet148/gotools/cryptos/goaes/cbc"
 	"github.com/civet148/walletconnect/proto"
 )
 
-type CallbackFn func(c context.Context, msg []byte) bool
+type CallbackFunc func(c context.Context, msg []byte) bool
 
 type DApp struct {
-	wc string
-	cb CallbackFn
+	wc  string
+	cb  CallbackFunc
 	uri *WalletConnectURI
 	ws *jsonrpc.WebSocketClient
 }
@@ -39,8 +36,7 @@ func (d *DApp) PublishTopic(topic, pubType string, data proto.SessionData) error
 	return nil
 }
 
-
-func (d *DApp) SubscribeTopic(topic string, cb CallbackFn) error {
+func (d *DApp) SubscribeTopic(topic string, cb CallbackFunc) error {
 	d.cb = cb
 	var req = proto.SessionData{
 		Topic:   topic,
@@ -61,6 +57,10 @@ func (d *DApp) SubscribeTopic(topic string, cb CallbackFn) error {
 	return nil
 }
 
+func (d *DApp) Close() {
+	d.ws.Close()
+}
+
 func (d *DApp) subscriber(ctx context.Context, msg []byte) bool {
 	log.Infof("subscriber: [%s]", string(msg))
 	var sd = &proto.SessionData{}
@@ -74,16 +74,9 @@ func (d *DApp) subscriber(ctx context.Context, msg []byte) bool {
 		log.Errorf("unmarshal payload error [%s]", err)
 		return false
 	}
-	key, _ := hex.DecodeString(d.uri.Key)
-	iv, _ := hex.DecodeString(payload.Iv)
-	aes := goaes.NewCryptoAES(goaes.AES_Mode_CBC, key, iv)
-	if aes == nil {
-		log.Errorf("create AES-256-CBC object error [%s]", err)
-		return false
-	}
-	data, err := aes.DecryptHex(payload.Data)
-	if err != nil {
-		log.Errorf("decrypt payload error [%s]", err)
+	data, ok := payload.DecodeByHexKey(d.uri.Key)
+	if !ok {
+		log.Errorf("decrypt payload failed")
 		return false
 	}
 	if !d.cb(ctx, data) {
