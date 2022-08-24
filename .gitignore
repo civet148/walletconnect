@@ -13,5 +13,4 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-/cmd/dapp_server/dapp_server
-/cmd/dapp_wallet/dapp_wallet
+/cmd/dapp-server/dapp-server
