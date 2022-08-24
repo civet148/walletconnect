@@ -19,8 +19,8 @@ github.com/civet148/gotools v1.4.1 h1:9E2rVOUIebQvdG/75iEc1/nqWxqmrUTSWepl0dbaGH
 github.com/civet148/gotools v1.4.1/go.mod h1:SfbUhBkKsnCIZ+1Ac94sQ2yTCbwkRKgVjDgGxrwPYmw=
 github.com/civet148/httpc v1.0.0 h1:xgfkY1RWL+nC8B8Do/Xk3ZS1loKQRQujfjE0IxM2Gfw=
 github.com/civet148/httpc v1.0.0/go.mod h1:x16y9I82c54fWJxf2+SxVZyAu7e/cDDaOaM9sXlUFKI=
-github.com/civet148/jsonrpc v0.3.0 h1:UPAUmG5boqlywOTEJrvGASwa5cwSCHHJl/BarFHuWYc=
-github.com/civet148/jsonrpc v0.3.0/go.mod h1:jbyRUfVWIsdUy3aghV1ANuxy9vlrmshTIX8IkNr0EMA=
+github.com/civet148/jsonrpc v0.3.1 h1:kTfUqh1BuhwdejUFO5voxuTReXTYpbRpTe2jEoeX77k=
+github.com/civet148/jsonrpc v0.3.1/go.mod h1:jbyRUfVWIsdUy3aghV1ANuxy9vlrmshTIX8IkNr0EMA=
 github.com/civet148/log v1.1.0/go.mod h1:fR/TOocpVvjAKFXzx/tf+LUpntHmfVekz126r5wmgME=
 github.com/civet148/log v1.1.3 h1:ClKaD8pgImkli+Ove21GjeydI77i9gurrAkSl4rRZrk=
 github.com/civet148/log v1.1.3/go.mod h1:goUIYRED4uhCzlF5mcwHrkJ+nPXJIPwcaB6IJSuiEW0=

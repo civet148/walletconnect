@@ -52,7 +52,7 @@ func (d *DApp) SubscribeTopic(topic string, cb CallbackFunc) error {
 		return log.Errorf(err.Error())
 	}
 	log.Debugf("subscribed to topic [%s] data [%s]", topic, data)
-	err = d.ws.Subscribe(context.Background(), string(data), d.subscriber)
+	err = d.ws.Subscribe(context.Background(), data, d.subscriber)
 	if err != nil {
 		return log.Errorf("subscribe error [%s]", err.Error())
 	}
