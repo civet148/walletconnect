@@ -44,6 +44,10 @@ func grace() {
 	}()
 }
 
+func init() {
+	log.SetLevel("debug")
+}
+
 func main() {
 	grace()
 

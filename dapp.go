@@ -14,26 +14,29 @@ type DApp struct {
 	wc  string
 	cb  CallbackFunc
 	uri *WalletConnectURI
-	ws *jsonrpc.WebSocketClient
+	ws  *jsonrpc.WebSocketClient
 }
 
 // NewDApp creates a new DApp with the given wc uri
 func NewDApp(wc string) *DApp {
-    uri, err := ParseWC(wc)
-    if err != nil {
-    	log.Errorf(err.Error())
-    	return nil
+	uri, err := ParseWC(wc)
+	if err != nil {
+		log.Errorf(err.Error())
+		return nil
 	}
 	return &DApp{
-		wc: wc,
+		wc:  wc,
 		uri: uri,
-		ws: jsonrpc.NewWebSocketClient(uri.Bridge, nil),
+		ws:  jsonrpc.NewWebSocketClient(uri.Bridge, nil),
 	}
 }
 
-func (d *DApp) PublishTopic(topic, pubType string, data proto.SessionData) error {
-
-	return nil
+func (d *DApp) PublishTopic(sd proto.SessionData) error {
+	data, err := json.Marshal(sd)
+	if err != nil {
+		return log.Errorf("unmarshal error [%s]", err)
+	}
+	return d.ws.Send(data)
 }
 
 func (d *DApp) SubscribeTopic(topic string, cb CallbackFunc) error {
@@ -44,13 +47,12 @@ func (d *DApp) SubscribeTopic(topic string, cb CallbackFunc) error {
 		Payload: "",
 		Silent:  true,
 	}
-	log.Infof("subscribed to topic [%s]", topic)
 	data, err := json.Marshal(&req)
 	if err != nil {
 		return log.Errorf(err.Error())
 	}
-	log.Infof("subscribed to topic [%s] data [%s]", topic, data)
-	err =  d.ws.Subscribe(context.Background(), string(data), d.subscriber)
+	log.Debugf("subscribed to topic [%s] data [%s]", topic, data)
+	err = d.ws.Subscribe(context.Background(), string(data), d.subscriber)
 	if err != nil {
 		return log.Errorf("subscribe error [%s]", err.Error())
 	}
@@ -62,7 +64,7 @@ func (d *DApp) Close() {
 }
 
 func (d *DApp) subscriber(ctx context.Context, msg []byte) bool {
-	log.Infof("subscriber: [%s]", string(msg))
+	log.Debugf("subscriber: [%s]", string(msg))
 	var sd = &proto.SessionData{}
 	err := json.Unmarshal(msg, sd)
 	if err != nil {
@@ -84,4 +86,3 @@ func (d *DApp) subscriber(ctx context.Context, msg []byte) bool {
 	}
 	return true
 }
-
