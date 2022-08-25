@@ -8,7 +8,7 @@ import (
 	"github.com/civet148/walletconnect/proto"
 )
 
-type CallbackFunc func(c context.Context, msg []byte) bool
+type CallbackFunc func(c context.Context, topic, typ string, msg []byte) bool
 
 type DApp struct {
 	wc  string
@@ -81,7 +81,7 @@ func (d *DApp) subscriber(ctx context.Context, msg []byte) bool {
 		log.Errorf("decrypt payload failed")
 		return false
 	}
-	if !d.cb(ctx, data) {
+	if !d.cb(ctx, sd.Topic, sd.Type, data) {
 		return false
 	}
 	return true

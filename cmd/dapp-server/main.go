@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/civet148/log"
 	"github.com/civet148/walletconnect"
+	"github.com/urfave/cli/v2"
 	"os"
 	"os/signal"
-	"github.com/civet148/log"
-	"github.com/urfave/cli/v2"
 )
 
 const (
@@ -91,7 +91,7 @@ func main() {
 	log.Infof("program exit...")
 }
 
-func Subscriber(ctx context.Context, msg []byte) bool {
+func Subscriber(ctx context.Context, topic, typ string,  msg []byte) bool {
 	log.Infof("message [%s]", msg)
 	return true
 }
