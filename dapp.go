@@ -64,6 +64,17 @@ func (d *DApp) SubscribeTopic(topic string, cb CallbackFunc) error {
 	return nil
 }
 
+func (d *DApp) SubscribeTopicNonBlock(topic string, cb CallbackFunc) error {
+	var err error
+	go func() {
+		err = d.SubscribeTopic(topic, cb)
+		if err!=nil {
+			err = log.Errorf("subscribe error [%s]", err.Error())
+		}
+	}()
+	return err
+}
+
 func (d *DApp) Close() {
 	d.ws.Close()
 }
