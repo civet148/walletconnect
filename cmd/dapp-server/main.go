@@ -67,12 +67,12 @@ func main() {
 			if cctx.Args().First() == "" {
 				return log.Errorf("wc uri required")
 			}
-			dapp := walletconnect.NewDApp(cctx.Args().First())
-			if dapp == nil {
+			dapp, err := walletconnect.NewDApp(cctx.Args().First())
+			if err != nil {
 				return log.Errorf("Dapp instance is nil")
 			}
 			topic := cctx.String(CMD_FLAG_NAME_SUB_TOPIC)
-			err := dapp.SubscribeTopic(topic, Subscriber)
+			err = dapp.SubscribeTopic(topic, Subscriber)
 			if err != nil {
 				return log.Errorf("subscribe error [%s]", err)
 			}

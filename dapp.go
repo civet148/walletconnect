@@ -18,17 +18,22 @@ type DApp struct {
 }
 
 // NewDApp creates a new DApp with the given wc uri
-func NewDApp(wc string) *DApp {
+func NewDApp(wc string) (*DApp, error) {
 	uri, err := ParseWC(wc)
 	if err != nil {
 		log.Errorf(err.Error())
-		return nil
+		return nil, err
+	}
+	ws, err := jsonrpc.NewWebSocketClient(uri.Bridge, nil)
+	if err != nil {
+		log.Errorf(err.Error())
+		return nil, err
 	}
 	return &DApp{
 		wc:  wc,
 		uri: uri,
-		ws:  jsonrpc.NewWebSocketClient(uri.Bridge, nil),
-	}
+		ws:  ws,
+	}, nil
 }
 
 func (d *DApp) PublishTopic(sd proto.SessionData) error {
